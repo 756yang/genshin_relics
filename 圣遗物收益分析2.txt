@@ -1,0 +1,44 @@
+这里计算收益分析：
+以每10点属性收益计算，先引用一篇文章：[url=https://nga.178.com/read.php?tid=24270728]《圣遗物数值学导论》[/url]
+攻击力：(1+atk+x)/(1+atk),x=5.829%
+双暴：(1+(ctr+x)*(ctd+2x))/(1+ctr*ctd),x=1.943%
+元素充能：(1-obr+(ene+x)*obr)/(1-obr+ene*obr),x=6.477%,obr为元素爆发率（Q输出占总输出比例）
+元素精通：(1-rtr+(1+(20/3-9340/(1401+cx+x))*cx_coef)*1.75*rtr)/(1-rtr+(1+(20/3-9340/(1401+cx))*cx_coef)*1.75*rtr),
+        x=23.316,cx_coef为系数（值1/2.4到1之间，取0.611）,rtr为元素反应率（反应概率）。
+现在绘制这四条收益曲线：
+cx_coef=0.611;
+obr=0.5;
+rtr=0.5;
+atk=0.384:0.01:3.684;
+gain_atk=(1+atk+0.05829)./(1+atk);
+ctc=0.25:0.01:1;
+gain_ctc=(1+(ctc+0.01943).*(2*ctc+0.03886))./(1+ctc.*ctc*2);
+ene=1:0.01:4.67;
+gain_ene=(1-obr+(ene+0.06477)*obr)./(1-obr+ene*obr);
+cx=0:1:1320;
+gain_cx=(1-rtr+(1+(20/3-9340./(1401+cx+23.316))*cx_coef)*1.75*rtr)./(1-rtr+(1+(20/3-9340./(1401+cx))*cx_coef)*1.75*rtr);
+ctd=2:0.01:3;
+gain_ctd=(1+ctd+0.07772)./(1+ctd);
+ctr=0.05:0.01:0.25;
+gain_ctr=(1+0.5*(ctr+0.03886))./(1+ctr*0.5);
+x=(atk-0.384)/0.05829;
+plot(x,gain_atk);
+xlabel('点数');
+ylabel('收益增长');
+title('各种属性点数与收益增长图');
+hold on;
+x=(ctc*2-0.3)/0.03886;
+plot(x,gain_ctc);
+x=(ene-1)/0.06477;
+plot(x,gain_ene);
+x=cx/23.316;
+plot(x,gain_cx);
+x=(ctd-2)/0.07772+1.7/0.03886;
+plot(x,gain_ctd);
+x=(ctr-0.05)/0.03886;
+plot(x,gain_ctr);
+legend("攻击","双暴","充能","精通","暴伤","暴率");
+[url=https://imgtu.com/i/cHdBqg][img]https://z3.ax1x.com/2021/04/20/cHdBqg.png[/img][/url]
+
+obr=0.45; rtr=0.45;
+[url=https://imgtu.com/i/cHdXQK][img]https://z3.ax1x.com/2021/04/20/cHdXQK.png[/img][/url]
