@@ -39,7 +39,7 @@ public:
 
 	//每次强化副属性随机分配7、8、9、10点属性到一个副属性上
 
-	constexpr static const double attrpoint[14] = {//属性分配的比值
+	constexpr static const double attrpoint[13] = {//属性分配的比值
 		76.8,//生命值
 		1.5,//生命值%
 		6,//防御力
@@ -162,6 +162,7 @@ private:
 		double command_xe_coef;//精通系数，剧变反应是1，增幅反应是1/2.4，应介于两者之中
 		double gain_plef_coef;//绝对优先下，默认生命%的收益倍率
 		double gain_pdef_coef;//绝对优先下，默认防御%的收益倍率
+		int cut_pictrue;//是否采用自定义的裁剪区域
 		double cut_point_x;//裁剪粘贴图片，使用两个点坐标构成的矩形，屏幕分辨率取1920*1080
 		double cut_point_y;
 		double cut_point_2_x;//裁剪粘贴图片，第二个点坐标
@@ -250,7 +251,7 @@ private:
 	double addition_attr_evaluate(const double *attr_ten, const double *attr_gain);//计算addition_attr
 	double main_attr_evaluate();
 
-	bool clipboard_to_bmpfile(const QString & filePath);
+	bool clipboard_to_picture(const QString & filePath);
 	void get_pic_attr();
 	void draw_gain_attr(int index);
 	//计算主属性分

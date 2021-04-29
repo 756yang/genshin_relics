@@ -194,6 +194,18 @@ genshin_relics::genshin_relics(QWidget *parent)
 					str = file.readLine();
 					if (str.startsWith('#'))continue;
 					if (str.contains(QRegExp("[0-9]"))) {
+						relics_coef_st.cut_pictrue = str.toInt();
+						break;
+					}
+				} while (!file.atEnd());
+				if (file.atEnd()) {
+					QMessageBox::critical(0, QString::fromStdWString(L"非正常结束"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+					break;
+				}
+				do {
+					str = file.readLine();
+					if (str.startsWith('#'))continue;
+					if (str.contains(QRegExp("[0-9]"))) {
 						strlist = str.split(" ", QString::SkipEmptyParts);
 						if (strlist.length() != 4) {
 							QMessageBox::critical(0, QString::fromStdWString(L"数值错误"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
@@ -802,9 +814,40 @@ void genshin_relics::on_lineEdit_9_editingFinished(void)
 
 void genshin_relics::on_lineEdit_10_editingFinished(void)
 {//期望生命%输入框
-	bool ok;
-	double a = ui.lineEdit_10->text().toDouble(&ok);
-	if (ok) {
+	bool oka = false, okb = true;
+	double a, b;
+	QString txt = ui.lineEdit_10->text();
+	int j = txt.lastIndexOf(']');
+	if (txt.at(0) == L'[' && j > 0) {
+		int i = txt.indexOf('-');
+		if (i >= 0) {//计算点数
+			a = txt.mid(1, i - 1).toDouble(&oka);
+			b = txt.mid(i + 1, j - i - 1).toDouble(&okb);
+			if (b != 0)a = (a - mainattr[0] * attr_ctr*attrpoint[addition_attr::lef])*100.0 / b + 41.4;
+			else okb = false;
+		}
+		else {
+			i = txt.indexOf('+');
+			if (i >= 0) {//计算输出
+				a = txt.mid(1, i - 1).toDouble(&oka);
+				b = txt.mid(i + 1, j - i - 1).toDouble(&okb);
+				a = 100.0*((a + b) / LEF - 1.0);
+			}
+			else {
+				i = txt.indexOf('/');
+				if (i >= 0) {//计算比值
+					a = txt.mid(1, i - 1).toDouble(&oka);
+					b = txt.mid(i + 1, j - i - 1).toDouble(&okb);
+					if (b != 0) a = a * 100.0 / b;
+					else okb = false;
+				}
+			}
+		}
+	}
+	else {
+		a = txt.toDouble(&oka);
+	}
+	if (oka && okb) {
 		if (fabs(a - exp_lef) > 0.005) {
 			ui.comboBox_5->setCurrentIndex(0);
 			ui.lineEdit_10->setText(d2qstring(exp_lef = a, 2));
@@ -817,9 +860,40 @@ void genshin_relics::on_lineEdit_10_editingFinished(void)
 
 void genshin_relics::on_lineEdit_11_editingFinished(void)
 {//期望防御%输入框
-	bool ok;
-	double a = ui.lineEdit_11->text().toDouble(&ok);
-	if (ok) {
+	bool oka = false, okb = true;
+	double a, b;
+	QString txt = ui.lineEdit_11->text();
+	int j = txt.lastIndexOf(']');
+	if (txt.at(0) == L'[' && j > 0) {
+		int i = txt.indexOf('-');
+		if (i >= 0) {//计算点数
+			a = txt.mid(1, i - 1).toDouble(&oka);
+			b = txt.mid(i + 1, j - i - 1).toDouble(&okb);
+			if (b != 0)a = a * 100.0 / b;
+			else okb = false;
+		}
+		else {
+			i = txt.indexOf('+');
+			if (i >= 0) {//计算输出
+				a = txt.mid(1, i - 1).toDouble(&oka);
+				b = txt.mid(i + 1, j - i - 1).toDouble(&okb);
+				a = 100.0*((a + b) / DEF - 1.0);
+			}
+			else {
+				i = txt.indexOf('/');
+				if (i >= 0) {//计算比值
+					a = txt.mid(1, i - 1).toDouble(&oka);
+					b = txt.mid(i + 1, j - i - 1).toDouble(&okb);
+					if (b != 0) a = a * 100.0 / b;
+					else okb = false;
+				}
+			}
+		}
+	}
+	else {
+		a = txt.toDouble(&oka);
+	}
+	if (oka && okb) {
 		if (fabs(a - exp_def) > 0.005) {
 			ui.comboBox_5->setCurrentIndex(0);
 			ui.lineEdit_11->setText(d2qstring(exp_def = a, 2));
@@ -832,9 +906,40 @@ void genshin_relics::on_lineEdit_11_editingFinished(void)
 
 void genshin_relics::on_lineEdit_12_editingFinished()
 {//圣遗物总攻击力%输入框
-	bool ok;
-	double a = ui.lineEdit_12->text().toDouble(&ok);
-	if (ok) {
+	bool oka = false, okb = true;
+	double a, b;
+	QString txt = ui.lineEdit_12->text();
+	int j = txt.lastIndexOf(']');
+	if (txt.at(0) == L'[' && j > 0) {
+		int i = txt.indexOf('-');
+		if (i >= 0) {//计算点数
+			a = txt.mid(1, i - 1).toDouble(&oka);
+			b = txt.mid(i + 1, j - i - 1).toDouble(&okb);
+			if (b != 0)a = (a - mainattr[1] * attr_ctr*attrpoint[addition_attr::atk])*100.0 / b + 38.4;
+			else okb = false;
+		}
+		else {
+			i = txt.indexOf('+');
+			if (i >= 0) {//计算输出
+				a = txt.mid(1, i - 1).toDouble(&oka);
+				b = txt.mid(i + 1, j - i - 1).toDouble(&okb);
+				a = 100.0*((a + b) / ATK - 1.0);
+			}
+			else {
+				i = txt.indexOf('/');
+				if (i >= 0) {//计算比值
+					a = txt.mid(1, i - 1).toDouble(&oka);
+					b = txt.mid(i + 1, j - i - 1).toDouble(&okb);
+					if (b != 0) a = a * 100.0 / b;
+					else okb = false;
+				}
+			}
+		}
+	}
+	else {
+		a = txt.toDouble(&oka);
+	}
+	if (oka && okb) {
 		if (fabs(a - relics_atk) > 0.005) {
 			if (relics_or_exp == 1)ui.comboBox_5->setCurrentIndex(0);
 			ui.lineEdit_12->setText(d2qstring(relics_atk = a, 2));
@@ -851,11 +956,22 @@ void genshin_relics::on_lineEdit_12_editingFinished()
 
 void genshin_relics::on_lineEdit_13_editingFinished()
 {//圣遗物总双暴输入框
-	bool oka,okb;
+	bool oka = false, okb = false;
 	double a, b;
 	QString str = ui.lineEdit_13->text();
-	a = str.left(str.indexOf('/')).toDouble(&oka);
-	b = str.mid(str.indexOf('/') + 1).toDouble(&okb);
+	int j = str.lastIndexOf(']');
+	if (str.at(0) == L'[' && j > 0) {
+		int i = str.indexOf(' ');
+		if (i < 0)i = str.indexOf('/');
+		if (i >= 0) {//计算点数
+			a = str.mid(1, i - 1).toDouble(&oka) + 5.0;
+			b = str.mid(i + 1, j - i - 1).toDouble(&okb) + 50.0;
+		}
+	}
+	else {
+		a = str.left(str.indexOf('/')).toDouble(&oka);
+		b = str.mid(str.indexOf('/') + 1).toDouble(&okb);
+	}
 	if (oka && okb) {
 		if (fabs(a - relics_ctr) > 0.005 || fabs(b - relics_ctd) > 0.005) {
 			if (relics_or_exp == 1)ui.comboBox_5->setCurrentIndex(0);
@@ -1308,7 +1424,7 @@ void genshin_relics::on_menuAboutSlt()
 void genshin_relics::on_menuPasteSlt()
 {//粘贴动作
 	QString fileName = QCoreApplication::applicationDirPath() + QString::fromStdWString(L"/genshin_relics.png");
-	clipboard_to_bmpfile(fileName);
+	clipboard_to_picture(fileName);
 }
 
 
@@ -1442,8 +1558,7 @@ void genshin_relics::relics_analysis(int prior, const double * attr, double * at
 	attr_gain[addition_attr::atk] = (1.0 + attr[addition_attr::patk] * 0.01 + 10.0 * attr_ctr*attrpoint[addition_attr::atk] / ATK) / temp;
 	attr_gain[addition_attr::patk] = (1.0 + attr[addition_attr::patk] * 0.01 + 0.1 * attr_ctr*attrpoint[addition_attr::patk]) / temp;
 	temp = 1.0 + attr[addition_attr::ctd] * 0.0001*attr[addition_attr::ctr];
-	if (attr[addition_attr::ctr] >= 96.11)attr_gain[addition_attr::ctr] = 1.0;
-	else attr_gain[addition_attr::ctr] = (1.0 + attr[addition_attr::ctd] * 0.0001*(attr[addition_attr::ctr] + 10 * attr_ctr*attrpoint[addition_attr::ctr])) / temp;
+	attr_gain[addition_attr::ctr] = (1.0 + attr[addition_attr::ctd] * 0.0001*(attr[addition_attr::ctr] + 10 * attr_ctr*attrpoint[addition_attr::ctr])) / temp;
 	attr_gain[addition_attr::ctd] = (1.0 + attr[addition_attr::ctr] * 0.0001*(attr[addition_attr::ctd] + 10 * attr_ctr*attrpoint[addition_attr::ctd])) / temp;
 	attr_gain[addition_attr::ene] = (1.0 - attr[addition_attr::obr] + (attr[addition_attr::ene] + 10 * attr_ctr*attrpoint[addition_attr::ene])*0.01*attr[addition_attr::obr]) /
 		(1.0 - attr[addition_attr::obr] + attr[addition_attr::ene] * 0.01*attr[addition_attr::obr]);
@@ -1515,6 +1630,7 @@ void genshin_relics::relics_analysis(int prior, const double * attr, double * at
 	default:
 		break;
 	}
+	if (attr[addition_attr::ctr] >= 97.4)attr_gain[addition_attr::ctr] = 1.0;//修正bug
 }
 
 double genshin_relics::relics_assign(double attrpoints, int attr_fixed, int prior, double * attr)
@@ -1949,7 +2065,7 @@ double genshin_relics::main_attr_evaluate()
 	return scores / max_scores;
 }
 
-bool genshin_relics::clipboard_to_bmpfile(const QString & filePath)
+bool genshin_relics::clipboard_to_picture(const QString & filePath)
 {
 	int x, y, w, h;
 	const QMimeData *mimeData = QApplication::clipboard()->mimeData();
@@ -1959,10 +2075,39 @@ bool genshin_relics::clipboard_to_bmpfile(const QString & filePath)
 		QImage img = qvariant_cast<QImage>(mimeData->imageData());
 		w = img.width();
 		h = img.height();
-		x = (int)(relics_coef_st.cut_point_x / 1922.0 * w);//因为窗口模式带边框，所以才不是1920*1080
-		y = (int)(relics_coef_st.cut_point_y / 1113.0 * h);
-		w = (int)(relics_coef_st.cut_point_2_x / 1922.0 * w) - x;
-		h = (int)(relics_coef_st.cut_point_2_y / 1113.0 * h) - y;
+		if (relics_coef_st.cut_pictrue != 0) {//因为窗口模式带边框
+			x = (int)((relics_coef_st.cut_point_x - 1) / 1920.0 * (w - 2)) + 1;
+			y = (int)((relics_coef_st.cut_point_y - 32) / 1080.0 * (h - 33)) + 32;
+			w = (int)((relics_coef_st.cut_point_2_x - 1) / 1920.0 * (w - 2)) + 1.5 - x;
+			h = (int)((relics_coef_st.cut_point_2_y - 32) / 1080.0 * (h - 33)) + 32.5 - y;
+		}
+		else {
+			w -= 2;
+			h -= 33;
+			double a = (double)w / (double)h;
+			double m, n, t, u;
+			if (a < 1.801) {//电脑截图，系数已确定
+				m = 0.00070421*a + 0.67349;
+				n = 0.092216*a - 0.0042476;
+				t = -0.00091932*a + 0.2691;
+				u = 0.24789*a + 0.01261;
+				x = m * w + 1;
+				y = n * h + 32;
+			}
+			else {//手机截图，系数不确定?
+				w += 2;
+				h += 33;
+				a = (double)w / (double)h;
+				m = 0.15913*a + 0.32804;
+				n = 0*a + 0.2;
+				t = -0.11971*a + 0.5342;
+				u = 0.043478*a + 0.47283;
+				x = m * w;
+				y = n * h;
+			}
+			w = t * w + 0.5;
+			h = u * h + 0.5;
+		}
 		img = img.copy(x, y, w, h);
 		img.save(filePath);
 		w = img.width();
