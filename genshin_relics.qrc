@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/new/prefix1"/>
+    <qresource prefix="/translations">
+        <file>genshin_relics_en.qm</file>
+        <file>genshin_relics_zh.qm</file>
+    </qresource>
+</RCC>

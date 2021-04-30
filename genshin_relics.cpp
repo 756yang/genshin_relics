@@ -1,12 +1,26 @@
 ﻿#include "genshin_relics.h"
+#ifdef _MSC_VER
+#pragma execution_character_set("utf-8")
+#endif
 
 struct genshin_relics::relics_coef genshin_relics::relics_coef_st = { 0 };
 
 genshin_relics::genshin_relics(QWidget *parent)
     : QMainWindow(parent)
 {
-    ui.setupUi(this);
-	setWindowTitle(QString::fromStdWString(L"圣遗物特调"));
+	QString locale = QLocale::system().name();
+	locale = "genshin_relics_" + locale.left(locale.indexOf('_'));
+	translator = new QTranslator(qApp);
+	if (!translator->load(locale, ":/translations"))translator->load("genshin_relics_en", ":/translations");
+	qApp->installTranslator(translator);
+	ui.setupUi(this);
+	ui.textBrowser->setText(tr("圣遗物评分为："));
+	ui.lineEdit_17->setText("450");
+	ui.lineEdit_5->setText("311");
+	ui.lineEdit->setText("3.9");
+	ui.lineEdit_2->setText("7.8");
+	ui.lineEdit_3->setText("35");
+	ui.lineEdit_4->setText("6.5");
 	QPalette pal = this->palette();
 	pal.setBrush(QPalette::Background, QBrush(QPixmap(QCoreApplication::applicationDirPath() + QString::fromStdWString(L"/background.png"))));
 	setPalette(pal);
@@ -14,10 +28,11 @@ genshin_relics::genshin_relics(QWidget *parent)
 	ui.graphicsView_2->setScene(new QGraphicsScene(this));
 	//ui.graphicsView->show();
 	//ui.graphicsView_2->show();
-	menuOpen = new QAction(QString::fromStdWString(L"打开图片"), this);//QT删除父控件时会自动删除子控件，故不需考虑析构
-	menuSave = new QAction(QString::fromStdWString(L"保存图片"), this);
-	menuAbout = new QAction(QString::fromStdWString(L"关于"), this);
-	menuPaste = new QAction(QString::fromStdWString(L"粘贴"), this);
+	menuOpen = new QAction(tr("打开图片"), this);//QT删除父控件时会自动删除子控件，故不需考虑析构
+	menuSave = new QAction(tr("保存图片"), this);
+	menuAbout = new QAction(tr("关于"), this);
+	menuPaste = new QAction(tr("粘贴"), this);
+	menuPaste2= new QAction(tr("剪贴\'"), this);
 	ui.menuBar->addAction(menuOpen);
 	connect(menuOpen, SIGNAL(triggered()), this, SLOT(on_menuOpenSlt()));
 	ui.menuBar->addAction(menuSave);
@@ -26,36 +41,54 @@ genshin_relics::genshin_relics(QWidget *parent)
 	connect(menuAbout, SIGNAL(triggered()), this, SLOT(on_menuAboutSlt()));
 	ui.menuBar->addAction(menuPaste);
 	connect(menuPaste, SIGNAL(triggered()), this, SLOT(on_menuPasteSlt()));
+	ui.menuBar->addAction(menuPaste2);
+	connect(menuPaste2, SIGNAL(triggered()), this, SLOT(on_menuPaste2Slt()));
+	menuLang = new QMenu(tr("语言"), this);
+	menuZhCN = new QAction(tr("简体中文"), this);
+	menuEnEn = new QAction(tr("英文"), this);
+	menuLang->addAction(menuZhCN);
+	menuLang->addAction(menuEnEn);
+	connect(menuZhCN, SIGNAL(triggered()), this, SLOT(on_menuZhCNSlt()));
+	connect(menuEnEn, SIGNAL(triggered()), this, SLOT(on_menuEnEnSlt()));
+	ui.menuBar->addMenu(menuLang);
+	menuAbout->setShortcut(QKeySequence::HelpContents);
 	menuOpen->setShortcuts(QList<QKeySequence>() << QKeySequence::Open << QKeySequence::Find);
 	menuSave->setShortcut(QKeySequence::Save);
 	menuPaste->setShortcut(QKeySequence::Paste);
+	menuPaste2->setShortcut(QKeySequence("Ctrl+G"));
 	relics_addindex = 0;
 	QString fileName = QCoreApplication::applicationDirPath() + QString::fromStdWString(L"/genshin_relics.ini");
-	int index, ini = 0, ini_s = 0;
-	int i;
-	QString str;
-	QStringList strlist;
+	int i, index, ini = 0, ini_s = 0;
+	QString str; QStringList strlist;
 	QFile file(fileName);
+	static QString tips1 = tr("重复定义");
+	static QString tips2 = tr("文件genshin_relics.ini内容错误");
+	static QString tips3 = tr("数值错误");
+	static QString tips4 = tr("非正常结束");
+	static QString tips5 = tr("缺少信息");
+	static QString tips6 = tr("文件genshin_relics.ini缺少部分配置信息");
+	static QString tips7 = tr("打开文件错误");
+	static QString tips8 = tr("找不到文件genshin_relics.ini");
 	if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		while (!file.atEnd())
 		{
 			switch (ini) {
 			case 1://[relics_exp]
-				if (ini_s & 1)QMessageBox::critical(0, QString::fromStdWString(L"重复定义"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+				if (ini_s & 1)QMessageBox::critical(0, tips1, tips2);
 				do {
 					str = file.readLine();
 					if (str.startsWith('#'))continue;
 					if (str.contains(QRegExp("[0-9]"))) {
 						index = str.toInt();
 						if (index <= 0 || index > 12) {
-							QMessageBox::critical(0, QString::fromStdWString(L"数值错误"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+							QMessageBox::critical(0, tips3, tips2);
 						}
 						index--;
 						break;
 					}
 				} while (!file.atEnd());
 				if (file.atEnd()) {
-					QMessageBox::critical(0, QString::fromStdWString(L"非正常结束"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+					QMessageBox::critical(0, tips4, tips2);
 					break;
 				}
 				i = 0;
@@ -65,7 +98,7 @@ genshin_relics::genshin_relics(QWidget *parent)
 					if (str.contains(QRegExp("[0-9]"))) {
 						strlist = str.split(" ",QString::SkipEmptyParts);
 						if (strlist.length() != 11) {
-							QMessageBox::critical(0, QString::fromStdWString(L"数值错误"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+							QMessageBox::critical(0, tips3, tips2);
 						}
 						relics_coef_st.relics_exp[i].relics_atk = strlist[0].toDouble();
 						relics_coef_st.relics_exp[i].relics_ctr = strlist[1].toDouble();
@@ -85,14 +118,14 @@ genshin_relics::genshin_relics(QWidget *parent)
 				ini = 0;
 				break;
 			case 2://[prior_attrpoint]
-				if (ini_s & 2)QMessageBox::critical(0, QString::fromStdWString(L"重复定义"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+				if (ini_s & 2)QMessageBox::critical(0, tips1, tips2);
 				do {
 					str = file.readLine();
 					if (str.startsWith('#'))continue;
 					if (str.contains(QRegExp("[0-9]"))) {
 						relics_coef_st.prior_attrpoint = str.toDouble();
 						if (relics_coef_st.prior_attrpoint <= 0) {
-							QMessageBox::critical(0, QString::fromStdWString(L"数值错误"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+							QMessageBox::critical(0, tips3, tips2);
 						}
 						break;
 					}
@@ -101,14 +134,14 @@ genshin_relics::genshin_relics(QWidget *parent)
 				ini = 0;
 				break;
 			case 3://[prior_coef]
-				if (ini_s & 4)QMessageBox::critical(0, QString::fromStdWString(L"重复定义"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+				if (ini_s & 4)QMessageBox::critical(0, tips1, tips2);
 				do {
 					str = file.readLine();
 					if (str.startsWith('#'))continue;
 					if (str.contains(QRegExp("[0-9]"))) {
 						strlist = str.split(" ", QString::SkipEmptyParts);
 						if (strlist.length() != 8) {
-							QMessageBox::critical(0, QString::fromStdWString(L"数值错误"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+							QMessageBox::critical(0, tips3, tips2);
 						}
 						relics_coef_st.prior_coef[0] = strlist[0].toDouble();
 						relics_coef_st.prior_coef[1] = strlist[1].toDouble();
@@ -125,14 +158,14 @@ genshin_relics::genshin_relics(QWidget *parent)
 				ini = 0;
 				break;
 			case 4://[prior_gain_coef]
-				if (ini_s & 8)QMessageBox::critical(0, QString::fromStdWString(L"重复定义"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+				if (ini_s & 8)QMessageBox::critical(0, tips1, tips2);
 				do {
 					str = file.readLine();
 					if (str.startsWith('#'))continue;
 					if (str.contains(QRegExp("[0-9]"))) {
 						relics_coef_st.prior_gain_coef = str.toDouble();
 						if (relics_coef_st.prior_gain_coef <= 0) {
-							QMessageBox::critical(0, QString::fromStdWString(L"数值错误"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+							QMessageBox::critical(0, tips3, tips2);
 						}
 						break;
 					}
@@ -141,14 +174,14 @@ genshin_relics::genshin_relics(QWidget *parent)
 				ini = 0;
 				break;
 			case 5://[command_xe_coef]
-				if (ini_s & 16)QMessageBox::critical(0, QString::fromStdWString(L"重复定义"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+				if (ini_s & 16)QMessageBox::critical(0, tips1, tips2);
 				do {
 					str = file.readLine();
 					if (str.startsWith('#'))continue;
 					if (str.contains(QRegExp("[0-9]"))) {
 						relics_coef_st.command_xe_coef = str.toDouble();
 						if (relics_coef_st.command_xe_coef <= 0) {
-							QMessageBox::critical(0, QString::fromStdWString(L"数值错误"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+							QMessageBox::critical(0, tips3, tips2);
 						}
 						break;
 					}
@@ -157,14 +190,14 @@ genshin_relics::genshin_relics(QWidget *parent)
 				ini = 0;
 				break;
 			case 6://[gain_plef_coef]
-				if (ini_s & 32)QMessageBox::critical(0, QString::fromStdWString(L"重复定义"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+				if (ini_s & 32)QMessageBox::critical(0, tips1, tips2);
 				do {
 					str = file.readLine();
 					if (str.startsWith('#'))continue;
 					if (str.contains(QRegExp("[0-9]"))) {
 						relics_coef_st.gain_plef_coef = str.toDouble();
 						if (relics_coef_st.gain_plef_coef <= 0.0 || relics_coef_st.gain_plef_coef > 1.0) {
-							QMessageBox::critical(0, QString::fromStdWString(L"数值错误"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+							QMessageBox::critical(0, tips3, tips2);
 						}
 						break;
 					}
@@ -173,14 +206,14 @@ genshin_relics::genshin_relics(QWidget *parent)
 				ini = 0;
 				break;
 			case 7://[gain_pdef_coef]
-				if (ini_s & 64)QMessageBox::critical(0, QString::fromStdWString(L"重复定义"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+				if (ini_s & 64)QMessageBox::critical(0, tips1, tips2);
 				do {
 					str = file.readLine();
 					if (str.startsWith('#'))continue;
 					if (str.contains(QRegExp("[0-9]"))) {
 						relics_coef_st.gain_pdef_coef = str.toDouble();
 						if (relics_coef_st.gain_pdef_coef <= 0.0 || relics_coef_st.gain_pdef_coef > 1.0) {
-							QMessageBox::critical(0, QString::fromStdWString(L"数值错误"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+							QMessageBox::critical(0, tips3, tips2);
 						}
 						break;
 					}
@@ -189,7 +222,7 @@ genshin_relics::genshin_relics(QWidget *parent)
 				ini = 0;
 				break;
 			case 8://[pic_cut_rect]
-				if (ini_s & 128)QMessageBox::critical(0, QString::fromStdWString(L"重复定义"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+				if (ini_s & 128)QMessageBox::critical(0, tips1, tips2);
 				do {
 					str = file.readLine();
 					if (str.startsWith('#'))continue;
@@ -199,7 +232,7 @@ genshin_relics::genshin_relics(QWidget *parent)
 					}
 				} while (!file.atEnd());
 				if (file.atEnd()) {
-					QMessageBox::critical(0, QString::fromStdWString(L"非正常结束"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+					QMessageBox::critical(0, tips4, tips2);
 					break;
 				}
 				do {
@@ -208,7 +241,7 @@ genshin_relics::genshin_relics(QWidget *parent)
 					if (str.contains(QRegExp("[0-9]"))) {
 						strlist = str.split(" ", QString::SkipEmptyParts);
 						if (strlist.length() != 4) {
-							QMessageBox::critical(0, QString::fromStdWString(L"数值错误"), QString::fromStdWString(L"文件genshin_relics.ini内容错误"));
+							QMessageBox::critical(0, tips3, tips2);
 						}
 						relics_coef_st.cut_point_x = strlist[0].toDouble();
 						relics_coef_st.cut_point_y = strlist[1].toDouble();
@@ -235,10 +268,10 @@ genshin_relics::genshin_relics(QWidget *parent)
 			}
 		}
 		file.close();
-		if (ini_s != 0xff)QMessageBox::critical(0, QString::fromStdWString(L"缺少信息"), QString::fromStdWString(L"文件genshin_relics.ini缺少部分配置信息"));
+		if (ini_s != 0xff)QMessageBox::critical(0, tips5, tips6);
 	}
 	else {
-		QMessageBox::critical(0, QString::fromStdWString(L"打开文件错误"), QString::fromStdWString(L"找不到文件genshin_relics.ini"));
+		QMessageBox::critical(0, tips7, tips8);
 	}
 	relics_atk = relics_coef_st.relics_exp[index].relics_atk;
 	relics_ctr = relics_coef_st.relics_exp[index].relics_ctr;
@@ -307,11 +340,11 @@ void genshin_relics::on_pushButton_15_clicked(void)
 	addition_attr = addition_attr_evaluate(attr_ten, attr_gain);
 	double main_attr = main_attr_evaluate();
 	total_attr = addition_attr * (9.0 / 17.0) + main_attr * (8.0 / 17.0);
-	ui.textBrowser->setText(QString::fromStdWString(L"[绝对评分]") +
-		QString::fromStdWString(L"\n圣遗物评分为：") + d2qstring(relics, 2) +
-		QString::fromStdWString(L"\n总属性评分为：") + d2qstring(total_attr, 2) +
-		QString::fromStdWString(L"\n副属性评分为：") + d2qstring(addition_attr, 2) +
-		QString::fromStdWString(L"\n每十属性点收益增长%：") +
+	ui.textBrowser->setText(tr("[绝对评分]") +
+		tr("\n圣遗物评分为：") + d2qstring(relics, 2) +
+		tr("\n总属性评分为：") + d2qstring(total_attr, 2) +
+		tr("\n副属性评分为：") + d2qstring(addition_attr, 2) +
+		tr("\n每十属性点收益增长%：") +
 		QString::fromStdWString(L"\nplef  pdef  patk  ctr   ctd\n") +
 		QString().sprintf("%-6.3lf", attr_gain[addition_attr::plef] * 100.0) +
 		QString().sprintf("%-6.3lf", attr_gain[addition_attr::pdef] * 100.0) +
@@ -363,11 +396,11 @@ void genshin_relics::on_pushButton_16_clicked(void)
 	addition_attr_2 = addition_attr_evaluate(attr_ten, attr_gain_2);
 	double main_attr = main_attr_evaluate();
 	total_attr_2 = addition_attr_2 * (9.0 / 17.0) + main_attr * (8.0 / 17.0);
-	ui.textBrowser->setText(QString::fromStdWString(L"[相对评分]") +
-		QString::fromStdWString(L"\n圣遗物评分为：") + d2qstring(relics_2, 2) +
-		QString::fromStdWString(L"\n总属性评分为：") + d2qstring(total_attr_2, 2) +
-		QString::fromStdWString(L"\n副属性评分为：") + d2qstring(addition_attr_2, 2) +
-		QString::fromStdWString(L"\n每十属性点收益增长%：") +
+	ui.textBrowser->setText(tr("[相对评分]") +
+		tr("\n圣遗物评分为：") + d2qstring(relics_2, 2) +
+		tr("\n总属性评分为：") + d2qstring(total_attr_2, 2) +
+		tr("\n副属性评分为：") + d2qstring(addition_attr_2, 2) +
+		tr("\n每十属性点收益增长%：") +
 		QString::fromStdWString(L"\nplef  pdef  patk  ctr   ctd\n") +
 		QString().sprintf("%-6.3lf", attr_gain_2[addition_attr::plef] * 100.0) +
 		QString().sprintf("%-6.3lf", attr_gain_2[addition_attr::pdef] * 100.0) +
@@ -459,26 +492,27 @@ void genshin_relics::on_pushButton_4_clicked(void)
 
 void genshin_relics::on_pushButton_5_clicked(void)
 {//副属性选择按钮生命值
+	static QString tips = tr("生命值");
 	switch (relics_addindex)
 	{
 	case 1:
 		addition_first = addition_attr::lef;
 		on_pushButton_2_clicked();
-		ui.pushButton->setText(QString::fromStdWString(L"生命值"));
+		ui.pushButton->setText(tips);
 		break;
 	case 2:
 		addition_second = addition_attr::lef;
 		on_pushButton_3_clicked();
-		ui.pushButton_2->setText(QString::fromStdWString(L"生命值"));
+		ui.pushButton_2->setText(tips);
 		break;
 	case 3:
 		addition_third = addition_attr::lef;
 		on_pushButton_4_clicked();
-		ui.pushButton_3->setText(QString::fromStdWString(L"生命值"));
+		ui.pushButton_3->setText(tips);
 		break;
 	case 4:
 		addition_fourth = addition_attr::lef;
-		ui.pushButton_4->setText(QString::fromStdWString(L"生命值"));
+		ui.pushButton_4->setText(tips);
 		relics_addindex = 0;
 		break;
 	default:
@@ -488,26 +522,27 @@ void genshin_relics::on_pushButton_5_clicked(void)
 
 void genshin_relics::on_pushButton_6_clicked(void)
 {//副属性选择按钮生命值%
+	static QString tips = tr("生命值%");
 	switch (relics_addindex)
 	{
 	case 1:
 		addition_first = addition_attr::plef;
 		on_pushButton_2_clicked();
-		ui.pushButton->setText(QString::fromStdWString(L"生命值%"));
+		ui.pushButton->setText(tips);
 		break;
 	case 2:
 		addition_second = addition_attr::plef;
 		on_pushButton_3_clicked();
-		ui.pushButton_2->setText(QString::fromStdWString(L"生命值%"));
+		ui.pushButton_2->setText(tips);
 		break;
 	case 3:
 		addition_third = addition_attr::plef;
 		on_pushButton_4_clicked();
-		ui.pushButton_3->setText(QString::fromStdWString(L"生命值%"));
+		ui.pushButton_3->setText(tips);
 		break;
 	case 4:
 		addition_fourth = addition_attr::plef;
-		ui.pushButton_4->setText(QString::fromStdWString(L"生命值%"));
+		ui.pushButton_4->setText(tips);
 		relics_addindex = 0;
 		break;
 	default:
@@ -517,26 +552,27 @@ void genshin_relics::on_pushButton_6_clicked(void)
 
 void genshin_relics::on_pushButton_7_clicked(void)
 {//副属性选择按钮防御力
+	static QString tips = tr("防御力");
 	switch (relics_addindex)
 	{
 	case 1:
 		addition_first = addition_attr::def;
 		on_pushButton_2_clicked();
-		ui.pushButton->setText(QString::fromStdWString(L"防御力"));
+		ui.pushButton->setText(tips);
 		break;
 	case 2:
 		addition_second = addition_attr::def;
 		on_pushButton_3_clicked();
-		ui.pushButton_2->setText(QString::fromStdWString(L"防御力"));
+		ui.pushButton_2->setText(tips);
 		break;
 	case 3:
 		addition_third = addition_attr::def;
 		on_pushButton_4_clicked();
-		ui.pushButton_3->setText(QString::fromStdWString(L"防御力"));
+		ui.pushButton_3->setText(tips);
 		break;
 	case 4:
 		addition_fourth = addition_attr::def;
-		ui.pushButton_4->setText(QString::fromStdWString(L"防御力"));
+		ui.pushButton_4->setText(tips);
 		relics_addindex = 0;
 		break;
 	default:
@@ -546,26 +582,27 @@ void genshin_relics::on_pushButton_7_clicked(void)
 
 void genshin_relics::on_pushButton_8_clicked(void)
 {//副属性选择按钮防御力%
+	static QString tips = tr("防御力%");
 	switch (relics_addindex)
 	{
 	case 1:
 		addition_first = addition_attr::pdef;
 		on_pushButton_2_clicked();
-		ui.pushButton->setText(QString::fromStdWString(L"防御力%"));
+		ui.pushButton->setText(tips);
 		break;
 	case 2:
 		addition_second = addition_attr::pdef;
 		on_pushButton_3_clicked();
-		ui.pushButton_2->setText(QString::fromStdWString(L"防御力%"));
+		ui.pushButton_2->setText(tips);
 		break;
 	case 3:
 		addition_third = addition_attr::pdef;
 		on_pushButton_4_clicked();
-		ui.pushButton_3->setText(QString::fromStdWString(L"防御力%"));
+		ui.pushButton_3->setText(tips);
 		break;
 	case 4:
 		addition_fourth = addition_attr::pdef;
-		ui.pushButton_4->setText(QString::fromStdWString(L"防御力%"));
+		ui.pushButton_4->setText(tips);
 		relics_addindex = 0;
 		break;
 	default:
@@ -575,26 +612,27 @@ void genshin_relics::on_pushButton_8_clicked(void)
 
 void genshin_relics::on_pushButton_9_clicked(void)
 {//副属性选择按钮攻击力
+	static QString tips = tr("攻击力");
 	switch (relics_addindex)
 	{
 	case 1:
 		addition_first = addition_attr::atk;
 		on_pushButton_2_clicked();
-		ui.pushButton->setText(QString::fromStdWString(L"攻击力"));
+		ui.pushButton->setText(tips);
 		break;
 	case 2:
 		addition_second = addition_attr::atk;
 		on_pushButton_3_clicked();
-		ui.pushButton_2->setText(QString::fromStdWString(L"攻击力"));
+		ui.pushButton_2->setText(tips);
 		break;
 	case 3:
 		addition_third = addition_attr::atk;
 		on_pushButton_4_clicked();
-		ui.pushButton_3->setText(QString::fromStdWString(L"攻击力"));
+		ui.pushButton_3->setText(tips);
 		break;
 	case 4:
 		addition_fourth = addition_attr::atk;
-		ui.pushButton_4->setText(QString::fromStdWString(L"攻击力"));
+		ui.pushButton_4->setText(tips);
 		relics_addindex = 0;
 		break;
 	default:
@@ -604,26 +642,27 @@ void genshin_relics::on_pushButton_9_clicked(void)
 
 void genshin_relics::on_pushButton_10_clicked(void)
 {//副属性选择按钮攻击力%
+	static QString tips = tr("攻击力%");
 	switch (relics_addindex)
 	{
 	case 1:
 		addition_first = addition_attr::patk;
 		on_pushButton_2_clicked();
-		ui.pushButton->setText(QString::fromStdWString(L"攻击力%"));
+		ui.pushButton->setText(tips);
 		break;
 	case 2:
 		addition_second = addition_attr::patk;
 		on_pushButton_3_clicked();
-		ui.pushButton_2->setText(QString::fromStdWString(L"攻击力%"));
+		ui.pushButton_2->setText(tips);
 		break;
 	case 3:
 		addition_third = addition_attr::patk;
 		on_pushButton_4_clicked();
-		ui.pushButton_3->setText(QString::fromStdWString(L"攻击力%"));
+		ui.pushButton_3->setText(tips);
 		break;
 	case 4:
 		addition_fourth = addition_attr::patk;
-		ui.pushButton_4->setText(QString::fromStdWString(L"攻击力%"));
+		ui.pushButton_4->setText(tips);
 		relics_addindex = 0;
 		break;
 	default:
@@ -633,26 +672,27 @@ void genshin_relics::on_pushButton_10_clicked(void)
 
 void genshin_relics::on_pushButton_11_clicked(void)
 {//副属性选择按钮暴击率
+	static QString tips = tr("暴击率");
 	switch (relics_addindex)
 	{
 	case 1:
 		addition_first = addition_attr::ctr;
 		on_pushButton_2_clicked();
-		ui.pushButton->setText(QString::fromStdWString(L"暴击率"));
+		ui.pushButton->setText(tips);
 		break;
 	case 2:
 		addition_second = addition_attr::ctr;
 		on_pushButton_3_clicked();
-		ui.pushButton_2->setText(QString::fromStdWString(L"暴击率"));
+		ui.pushButton_2->setText(tips);
 		break;
 	case 3:
 		addition_third = addition_attr::ctr;
 		on_pushButton_4_clicked();
-		ui.pushButton_3->setText(QString::fromStdWString(L"暴击率"));
+		ui.pushButton_3->setText(tips);
 		break;
 	case 4:
 		addition_fourth = addition_attr::ctr;
-		ui.pushButton_4->setText(QString::fromStdWString(L"暴击率"));
+		ui.pushButton_4->setText(tips);
 		relics_addindex = 0;
 		break;
 	default:
@@ -662,26 +702,27 @@ void genshin_relics::on_pushButton_11_clicked(void)
 
 void genshin_relics::on_pushButton_12_clicked(void)
 {//副属性选择按钮暴击伤害
+	static QString tips = tr("暴击伤害");
 	switch (relics_addindex)
 	{
 	case 1:
 		addition_first = addition_attr::ctd;
 		on_pushButton_2_clicked();
-		ui.pushButton->setText(QString::fromStdWString(L"暴击伤害"));
+		ui.pushButton->setText(tips);
 		break;
 	case 2:
 		addition_second = addition_attr::ctd;
 		on_pushButton_3_clicked();
-		ui.pushButton_2->setText(QString::fromStdWString(L"暴击伤害"));
+		ui.pushButton_2->setText(tips);
 		break;
 	case 3:
 		addition_third = addition_attr::ctd;
 		on_pushButton_4_clicked();
-		ui.pushButton_3->setText(QString::fromStdWString(L"暴击伤害"));
+		ui.pushButton_3->setText(tips);
 		break;
 	case 4:
 		addition_fourth = addition_attr::ctd;
-		ui.pushButton_4->setText(QString::fromStdWString(L"暴击伤害"));
+		ui.pushButton_4->setText(tips);
 		relics_addindex = 0;
 		break;
 	default:
@@ -691,26 +732,27 @@ void genshin_relics::on_pushButton_12_clicked(void)
 
 void genshin_relics::on_pushButton_13_clicked(void)
 {//副属性选择按钮元素充能
+	static QString tips = tr("元素充能");
 	switch (relics_addindex)
 	{
 	case 1:
 		addition_first = addition_attr::ene;
 		on_pushButton_2_clicked();
-		ui.pushButton->setText(QString::fromStdWString(L"元素充能"));
+		ui.pushButton->setText(tips);
 		break;
 	case 2:
 		addition_second = addition_attr::ene;
 		on_pushButton_3_clicked();
-		ui.pushButton_2->setText(QString::fromStdWString(L"元素充能"));
+		ui.pushButton_2->setText(tips);
 		break;
 	case 3:
 		addition_third = addition_attr::ene;
 		on_pushButton_4_clicked();
-		ui.pushButton_3->setText(QString::fromStdWString(L"元素充能"));
+		ui.pushButton_3->setText(tips);
 		break;
 	case 4:
 		addition_fourth = addition_attr::ene;
-		ui.pushButton_4->setText(QString::fromStdWString(L"元素充能"));
+		ui.pushButton_4->setText(tips);
 		relics_addindex = 0;
 		break;
 	default:
@@ -720,26 +762,27 @@ void genshin_relics::on_pushButton_13_clicked(void)
 
 void genshin_relics::on_pushButton_14_clicked(void)
 {//副属性选择按钮元素精通
+	static QString tips = tr("元素精通");
 	switch (relics_addindex)
 	{
 	case 1:
 		addition_first = addition_attr::cx;
 		on_pushButton_2_clicked();
-		ui.pushButton->setText(QString::fromStdWString(L"元素精通"));
+		ui.pushButton->setText(tips);
 		break;
 	case 2:
 		addition_second = addition_attr::cx;
 		on_pushButton_3_clicked();
-		ui.pushButton_2->setText(QString::fromStdWString(L"元素精通"));
+		ui.pushButton_2->setText(tips);
 		break;
 	case 3:
 		addition_third = addition_attr::cx;
 		on_pushButton_4_clicked();
-		ui.pushButton_3->setText(QString::fromStdWString(L"元素精通"));
+		ui.pushButton_3->setText(tips);
 		break;
 	case 4:
 		addition_fourth = addition_attr::cx;
-		ui.pushButton_4->setText(QString::fromStdWString(L"元素精通"));
+		ui.pushButton_4->setText(tips);
 		relics_addindex = 0;
 		break;
 	default:
@@ -1084,11 +1127,11 @@ void genshin_relics::on_pushButton_17_clicked(void)
 {//更改期望或更改圣遗物总属性
 	ui.comboBox_5->setCurrentIndex(0);
 	if (relics_or_exp == 0) {
-		ui.pushButton_17->setText(QString::fromStdWString(L"更改圣遗物"));
+		ui.pushButton_17->setText(tr("更改圣遗物"));
 		relics_or_exp = 1;
 	}
 	else {
-		ui.pushButton_17->setText(QString::fromStdWString(L"更改期望"));
+		ui.pushButton_17->setText(tr("更改期望"));
 		relics_or_exp = 0;
 	}
 }
@@ -1242,7 +1285,7 @@ void genshin_relics::on_pushButton_29_clicked()
 		attr_init[addition_attr::pdef] = exp_def;
 	}
 	if (attrpoints <= 0.0) {
-		QMessageBox::about(0, QString::fromStdWString(L"点数分配"), QString::fromStdWString(L"剩余点数过小，停止分配！点数：") + d2qstring(attrpoints, 2));
+		QMessageBox::about(0, tr("点数分配"), tr("剩余点数过小，停止分配！点数：") + d2qstring(attrpoints, 2));
 		return;
 	}
 	double attr[4][10];
@@ -1277,25 +1320,25 @@ void genshin_relics::on_pushButton_29_clicked()
 		}
 	}
 	qsort(relics_on, 4, sizeof(relics_on[0]), compare_double);
-	QString text = QString::fromStdWString(L"[点数分配]");
+	QString text = tr("[点数分配]");
 	for (int i = 0; i < 4; i++) {
 		if (relics_on[i].relics < 0.0)continue;
 		switch (relics_on[i].attr)
 		{
 		case 0:
-			text.append(QString::fromStdWString(L"\n攻击路线，评分：") + d2qstring(10, relics_on[i].relics) +
+			text.append(tr("\n攻击路线，评分：") + d2qstring(10, relics_on[i].relics) +
 				"add=" + d2qstring(attr[0][addition_attr::add]));
 			break;
 		case 1:
-			text.append(QString::fromStdWString(L"\n攻击路线，评分：") + d2qstring(10, relics_on[i].relics) +
+			text.append(tr("\n攻击路线，评分：") + d2qstring(10, relics_on[i].relics) +
 				"add=" + d2qstring(attr[1][addition_attr::add]));
 			break;
 		case 2:
-			text.append(QString::fromStdWString(L"\n双暴路线，评分：") + d2qstring(10, relics_on[i].relics) +
+			text.append(tr("\n双暴路线，评分：") + d2qstring(10, relics_on[i].relics) +
 				"add=" + d2qstring(attr[2][addition_attr::add]));
 			break;
 		case 3:
-			text.append(QString::fromStdWString(L"\n双暴路线，评分：") + d2qstring(10, relics_on[i].relics) +
+			text.append(tr("\n双暴路线，评分：") + d2qstring(10, relics_on[i].relics) +
 				"add=" + d2qstring(attr[3][addition_attr::add]));
 			break;
 		default:
@@ -1331,8 +1374,8 @@ void genshin_relics::on_lineEdit_17_editingFinished()
 
 void genshin_relics::on_menuOpenSlt()
 {//打开图片动作
-	QString dlgTitle = QString::fromStdWString(L"打开图片"); //对话框标题
-	QString filter = QString::fromStdWString(L"所有图片(*.bmp *.jpg *.jpeg *.png);;PNG图片(*.png);;BMP图片(*.bmp);;JPEG图片(*.jpg *.jpeg);;所有文件(*.*)"); //文件过滤器
+	QString dlgTitle = tr("打开图片"); //对话框标题
+	QString filter = tr("所有图片(*.bmp *.jpg *.jpeg *.png);;PNG图片(*.png);;BMP图片(*.bmp);;JPEG图片(*.jpg *.jpeg);;所有文件(*.*)"); //文件过滤器
 	QString file = QFileDialog::getOpenFileName(this, dlgTitle, nullptr, filter);
 	QImage img;
 	if (img.load(file)) {
@@ -1357,7 +1400,7 @@ void genshin_relics::on_menuOpenSlt()
 		scores_ready = 0;
 	}
 	else {
-		QMessageBox::critical(0, QString::fromStdWString(L"打开图片"), QString::fromStdWString(L"打开失败：") + file);
+		QMessageBox::critical(0, tr("打开图片"), tr("打开失败：") + file);
 	}
 }
 
@@ -1365,8 +1408,8 @@ void genshin_relics::on_menuSaveSlt()
 {//保存图片动作
 	if (pic_ready) {
 		QString text;
-		QString dlgTitle = QString::fromStdWString(L"保存图片"); //对话框标题
-		QString filter = QString::fromStdWString(L"PNG图片(*.png);;BMP图片(*.bmp);;JPEG图片(*.jpg *.jpeg);;所有文件(*.*)"); //文件过滤器
+		QString dlgTitle = tr("保存图片"); //对话框标题
+		QString filter = tr("PNG图片(*.png);;BMP图片(*.bmp);;JPEG图片(*.jpg *.jpeg);;所有文件(*.*)"); //文件过滤器
 		QString file = QFileDialog::getSaveFileName(this, dlgTitle, nullptr, filter);
 		QGraphicsScene *scene = ui.graphicsView->scene();
 		QImage img(scene->width(), scene->height(), QImage::Format_ARGB32);
@@ -1378,53 +1421,59 @@ void genshin_relics::on_menuSaveSlt()
 		painter2.setPen(Qt::red);
 		painter2.setFont(QFont("Consolas", 16, QFont::Bold));
 		if (scores_ready & 1) {
-			text += QString::fromStdWString(L"绝对总评:") + d2qstring(total_attr);
-			text += QString::fromStdWString(L"\n副属性分:") + d2qstring(addition_attr);
+			text += tr("绝对总评:") + d2qstring(total_attr);
+			text += tr("\n副属性分:") + d2qstring(addition_attr);
 		}
 		if (scores_ready & 2) {
-			text += QString::fromStdWString(L"\n相对总评:") + d2qstring(total_attr_2);
-			text += QString::fromStdWString(L"\n副属性分:") + d2qstring(addition_attr_2);
+			text += tr("\n相对总评:") + d2qstring(total_attr_2);
+			text += tr("\n副属性分:") + d2qstring(addition_attr_2);
 		}
 		painter2.drawText(img2.rect(), Qt::AlignRight | Qt::AlignBottom, text);
 		img2.save(file);
 	}
 	else {
-		QMessageBox::critical(0, QString::fromStdWString(L"保存图片"), QString::fromStdWString(L"您还未打开或粘贴图片！"));
+		QMessageBox::critical(0, tr("保存图片"), tr("您还未打开或粘贴图片！"));
 	}
 }
 
 void genshin_relics::on_menuAboutSlt()
 {//关于动作
-	QMessageBox::about(0, QString::fromStdWString(L"关于"), QString::fromStdWString(L"圣遗物特调是一款原神圣遗物工具，它集评分、优化、计算于一体。"
-		L"\n[评分]，可以对单个圣遗物进行两种类型的评分，绝对评分使优先属性具有绝对权，相对评分使优先属性相对优先，绝对优先给所有属性评分，而相对优先除了给优先属性评分外只给输出属性评分。"
-		L"\n绝对评分不收敛，相对评分收敛于最优属性，因此圣遗物点数分配采用相对评分体系，而绝对优先更适合评分体系。相对优先评分说明了各个属性对输出提升，这比绝对优先更准确。"
-		L"\n[优化]，即点数分配，一般地，一套圣遗物副属性点数最多450点，而毕业装输出点数才400 + ，加上武器一般450点左右，这是我们可以分配的点数。"
-		L"\n优化有两个方向，攻击路线适合前中期输出点数不到350，双暴路线（起始50 / 100双暴）适合后期点数达400 + ，主C推荐双暴路线，而辅C或辅助推荐攻击路线，后期辅C转型双暴路线。"
-		L"\n[计算]，能够计算一套圣遗物提供的副属性点数以及输出评分。武器和人物自带等属性也可以算到圣遗物里面，输出评分直接表明伤害，优先属性能够提升输出评分，一般输出评分高则圣遗物套装更强。"
-		L"\n不仅如此，还支持图片识别，从游戏界面直接截图（Alt + PrtSc）然后粘贴（Ctrl + V）到其中，可自动设置单个圣遗物的属性。"
-		L"\n"
-		L"\n打开图片：打开单个圣遗物的属性截图，并识别。"
-		L"\n保存图片：保存打开或粘贴的图片，如果有评分，则打印评分到保存的图片中。"
-		L"\n关于：帮助说明"
-		L"\n粘贴：打开剪切板中的图片数据（不是文件）并截取一部分作单个圣遗物的属性截图，并识别。"
-		L"\n顶部五个按钮，对应圣遗物总属性，点按会固定属性（点数分配时不改变其属性）。"
-		L"\n其下十个按钮，对应十项副属性，与副属性四个按钮配合，以改变副属性项。"
-		L"\n副属性四个按钮，点按会出现\"[]\"以表示选中，然后按下十项副属性按钮，以填入副属性项。"
-		L"\n期望总属性下有六个按钮，攻击力%和双暴暴击按钮按下将其期望属性与圣遗物总属性同步，元素爆发率和元素反应率按钮按下分别将圣遗物总元素充能和元素精通用于评分（单个圣遗物评分默认使用固定的元素充能和精通），生命%和防御%按钮也是用作圣遗物总属性固定（其输入框是共用的）。"
-		L"\n更改期望 / 更改圣遗物按钮，下拉选框有十二个用于评分的分级，更改这个选框时影响期望总属性 / 圣遗物总属性。"
-		L"\n期望总属性右边选框，更改优先属性。"
-		L"\n圣遗物点数按钮，点按进行点数分配，其右输入框输入0或负值以计算圣遗物副属性点数（固定属性转换为百分比属性计算，会损失一定点数）。"
-		L"\n生命值lef  防御力def  攻击力atk  暴击率ctr  暴击伤害ctd"
-		L"\n元素充能ene  元素精通cx  附加伤害add  加p表示百分比，如patk"
-		L"\n"
-		L"\n作者：杨玉军"
-		L"\n于2021年4月19日完成"));
+	QMessageBox::about(0, tr("关于"), tr("圣遗物特调是一款原神圣遗物工具，它集评分、优化、计算于一体。"
+		"\n[评分]，可以对单个圣遗物进行两种类型的评分，绝对评分使优先属性具有绝对权，相对评分使优先属性相对优先，绝对优先给所有属性评分，而相对优先除了给优先属性评分外只给输出属性评分。"
+		"\n绝对评分不收敛，相对评分收敛于最优属性，因此圣遗物点数分配采用相对评分体系，而绝对优先更适合评分体系。相对优先评分说明了各个属性对输出提升，这比绝对优先更准确。"
+		"\n[优化]，即点数分配，一般地，一套圣遗物副属性点数最多450点，而毕业装输出点数才400 + ，加上武器一般450点左右，这是我们可以分配的点数。"
+		"\n优化有两个方向，攻击路线适合前中期输出点数不到350，双暴路线（起始50 / 100双暴）适合后期点数达400 + ，主C推荐双暴路线，而辅C或辅助推荐攻击路线，后期辅C转型双暴路线。"
+		"\n[计算]，能够计算一套圣遗物提供的副属性点数以及输出评分。武器和人物自带等属性也可以算到圣遗物里面，输出评分直接表明伤害，优先属性能够提升输出评分，一般输出评分高则圣遗物套装更强。"
+		"\n不仅如此，还支持图片识别，从游戏界面直接截图（Alt + PrtSc）然后粘贴（Ctrl + V）到其中，可自动设置单个圣遗物的属性。"
+		"\n"
+		"\n打开图片：打开单个圣遗物的属性截图，并识别。"
+		"\n保存图片：保存打开或粘贴的图片，如果有评分，则打印评分到保存的图片中。"
+		"\n关于：帮助说明"
+		"\n粘贴：打开剪切板中的图片数据（不是文件）并截取一部分作单个圣遗物的属性截图，并识别。"
+		"\n顶部五个按钮，对应圣遗物总属性，点按会固定属性（点数分配时不改变其属性）。"
+		"\n其下十个按钮，对应十项副属性，与副属性四个按钮配合，以改变副属性项。"
+		"\n副属性四个按钮，点按会出现\"[]\"以表示选中，然后按下十项副属性按钮，以填入副属性项。"
+		"\n期望总属性下有六个按钮，攻击力%和双暴暴击按钮按下将其期望属性与圣遗物总属性同步，元素爆发率和元素反应率按钮按下分别将圣遗物总元素充能和元素精通用于评分（单个圣遗物评分默认使用固定的元素充能和精通），生命%和防御%按钮也是用作圣遗物总属性固定（其输入框是共用的）。"
+		"\n更改期望 / 更改圣遗物按钮，下拉选框有十二个用于评分的分级，更改这个选框时影响期望总属性 / 圣遗物总属性。"
+		"\n期望总属性右边选框，更改优先属性。"
+		"\n圣遗物点数按钮，点按进行点数分配，其右输入框输入0或负值以计算圣遗物副属性点数（固定属性转换为百分比属性计算，会损失一定点数）。"
+		"\n生命值lef  防御力def  攻击力atk  暴击率ctr  暴击伤害ctd"
+		"\n元素充能ene  元素精通cx  附加伤害add  加p表示百分比，如patk"
+		"\n"
+		"\n作者：杨玉军"
+		"\n于2021年4月19日完成"));
 }
 
 void genshin_relics::on_menuPasteSlt()
 {//粘贴动作
 	QString fileName = QCoreApplication::applicationDirPath() + QString::fromStdWString(L"/genshin_relics.png");
-	clipboard_to_picture(fileName);
+	clipboard_to_picture(fileName, 0);
+}
+
+void genshin_relics::on_menuPaste2Slt()
+{//剪贴'动作
+	QString fileName = QCoreApplication::applicationDirPath() + QString::fromStdWString(L"/genshin_relics.png");
+	clipboard_to_picture(fileName, 1);
 }
 
 
@@ -2065,7 +2114,7 @@ double genshin_relics::main_attr_evaluate()
 	return scores / max_scores;
 }
 
-bool genshin_relics::clipboard_to_picture(const QString & filePath)
+bool genshin_relics::clipboard_to_picture(const QString & filePath, int flags)
 {
 	int x, y, w, h;
 	const QMimeData *mimeData = QApplication::clipboard()->mimeData();
@@ -2086,25 +2135,20 @@ bool genshin_relics::clipboard_to_picture(const QString & filePath)
 			h -= 33;
 			double a = (double)w / (double)h;
 			double m, n, t, u;
-			if (a < 1.801) {//电脑截图，系数已确定
+			if ((a < 1.801) ^ flags) {//电脑截图，系数已确定
 				m = 0.00070421*a + 0.67349;
 				n = 0.092216*a - 0.0042476;
 				t = -0.00091932*a + 0.2691;
 				u = 0.24789*a + 0.01261;
-				x = m * w + 1;
-				y = n * h + 32;
 			}
-			else {//手机截图，系数不确定?
-				w += 2;
-				h += 33;
-				a = (double)w / (double)h;
-				m = 0.15913*a + 0.32804;
-				n = 0*a + 0.2;
-				t = -0.11971*a + 0.5342;
-				u = 0.043478*a + 0.47283;
-				x = m * w;
-				y = n * h;
+			else {//手机截图，系数已确定
+				m = 0.078987*a + 0.50042;
+				n = 0.0030456*a + 0.19313;
+				t = -0.14349*a + 0.58732;
+				u = 0.00032361*a + 0.56641;
 			}
+			x = m * w + 1;
+			y = n * h + 32;
 			w = t * w + 0.5;
 			h = u * h + 0.5;
 		}
@@ -2169,17 +2213,27 @@ void genshin_relics::get_pic_attr()
 	txt[len] = '\0';
 	GBCToUnicode(txt, buf, 4096);
 	fclose(fp);
-	wchar_t main_attr[10][10] = {
-		L"生命",
-		L"防御",
-		L"攻击",
-		L"暴击率",
-		L"暴击伤害",
-		L"元素充能",
-		L"元素精通",
-		L"元素伤害",
-		L"物理伤害",
-		L"治疗"
+	std::wstring tips1 = tr("生命").toStdWString();
+	std::wstring tips2 = tr("防御").toStdWString();
+	std::wstring tips3 = tr("攻击").toStdWString();
+	std::wstring tips4 = tr("暴击率").toStdWString();
+	std::wstring tips5 = tr("暴击伤害").toStdWString();
+	std::wstring tips6 = tr("元素充能").toStdWString();
+	std::wstring tips7 = tr("元素精通").toStdWString();
+	std::wstring tips8 = tr("元素伤害").toStdWString();
+	std::wstring tips9 = tr("物理伤害").toStdWString();
+	std::wstring tips10 = tr("治疗").toStdWString();
+	const wchar_t *main_attr[10] = {
+		tips1.data(),
+		tips2.data(),
+		tips3.data(),
+		tips4.data(),
+		tips5.data(),
+		tips6.data(),
+		tips7.data(),
+		tips8.data(),
+		tips9.data(),
+		tips10.data()
 	};
 	wchar_t *pos_main[10];
 	int index=0;
@@ -2439,3 +2493,42 @@ void genshin_relics::draw_gain_attr(int index)
 	ui.graphicsView_2->show();
 }
 
+void genshin_relics::on_menuZhCNSlt()
+{//改为简体中文
+	qApp->removeTranslator(translator);
+	delete translator;
+	translator = new QTranslator(qApp);
+	bool ok=translator->load("genshin_relics_zh", ":/translations");
+	qApp->installTranslator(translator);
+	ui.comboBox->setFixedWidth(120);
+	ui.comboBox_2->setFixedWidth(100);
+	ui.comboBox_5->setGeometry(720, 590, 110, 36);
+	retranslateUi();
+}
+
+void genshin_relics::on_menuEnEnSlt()
+{//改为英文
+	qApp->removeTranslator(translator);
+	delete translator;
+	translator = new QTranslator(qApp);
+	translator->load("genshin_relics_en", ":/translations");
+	qApp->installTranslator(translator);
+	ui.comboBox->setFixedWidth(150);
+	ui.comboBox_2->setFixedWidth(140);
+	ui.comboBox_5->setGeometry(635, 590, 225, 36);
+	retranslateUi();
+}
+
+void genshin_relics::retranslateUi()
+{//更新翻译
+	ui.retranslateUi(this);
+	ui.textBrowser->setText(tr("圣遗物评分为："));
+	menuOpen->setText(tr("打开图片"));
+	menuSave->setText(tr("保存图片"));
+	menuAbout->setText(tr("关于"));
+	menuPaste->setText(tr("粘贴"));
+	menuPaste2->setText(tr("剪贴\'"));
+	menuLang->setTitle(tr("语言"));
+	menuZhCN->setText(tr("简体中文"));
+	menuEnEn->setText(tr("英文"));
+}

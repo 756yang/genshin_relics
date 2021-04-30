@@ -6,6 +6,7 @@
 #include <QClipboard>
 #include <QMimeData>
 #include <QFileDialog>
+#include <QTranslator>
 #include <tchar.h>
 #include <math.h>
 #include <stdio.h>
@@ -151,6 +152,9 @@ private slots:
 	void on_menuSaveSlt();
 	void on_menuAboutSlt();
 	void on_menuPasteSlt();
+	void on_menuPaste2Slt();
+	void on_menuZhCNSlt();
+	void on_menuEnEnSlt();
 
 private:
 
@@ -190,11 +194,16 @@ private:
 		return a >= '0'&& a <= '9';
 	}
 
+	QTranslator *translator;
     Ui::genshin_relicsClass ui;
 	QAction *menuOpen;
 	QAction *menuSave;
 	QAction *menuAbout;
 	QAction *menuPaste;
+	QAction *menuPaste2;
+	QMenu *menuLang;
+	QAction *menuZhCN;
+	QAction *menuEnEn;
 	int relics_addindex;//副属性索引
 	int addition_first;//第一条副属性
 	int addition_second;//第二条副属性
@@ -249,10 +258,11 @@ private:
 	static double relics_evaluate(int prior, const double *attr);//计算relics
 	static void addition_attr_analysis(int prior, const double *attr, double *attr_gain);//计算收益图
 	double addition_attr_evaluate(const double *attr_ten, const double *attr_gain);//计算addition_attr
-	double main_attr_evaluate();
+	double main_attr_evaluate();//计算主属性分
 
-	bool clipboard_to_picture(const QString & filePath);
+	bool clipboard_to_picture(const QString & filePath, int flags = 0);
 	void get_pic_attr();
 	void draw_gain_attr(int index);
-	//计算主属性分
+	
+	void retranslateUi();
 };
