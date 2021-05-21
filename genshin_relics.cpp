@@ -52,14 +52,14 @@ genshin_relics::genshin_relics(QWidget *parent)
     combox_en->setStyleSheet("QComboBox {background: transparent;color: black;border: 1px solid white;padding: 1px 1px 1px 1px;}"
         " QComboBox QAbstractScrollArea QScrollBar:vertical {width: 20px;}");
     combox_en->addItem("default");
-    connect(combox_en, SIGNAL(activated(int)), this, SLOT(on_comboBox_character(int)));
+    connect(combox_en, SIGNAL(activated(int)), this, SLOT(on_comboBoxCharacter(int)));
     action_com_en = ui.mainToolBar->addWidget(combox_en);//combox_en是mainToolBar的子控件,其独立于com_en而关联之
     ui.mainToolBar->removeAction(action_com_en);
     combox_zh = new QComboBox(this);
     combox_zh->setStyleSheet("QComboBox {background: transparent;color: black;border: 1px solid white;padding: 1px 1px 1px 1px;}"
         " QComboBox QAbstractScrollArea QScrollBar:vertical {width: 20px;}");
     combox_zh->addItem("默认");
-    connect(combox_zh, SIGNAL(activated(int)), this, SLOT(on_comboBox_character(int)));
+    connect(combox_zh, SIGNAL(activated(int)), this, SLOT(on_comboBoxCharacter(int)));
     action_com_zh = ui.mainToolBar->addWidget(combox_zh);
     if (FONT_SIZE != 0){
         menuOpen->setFont(QFont("SimSun", FONT_SIZE, QFont::Normal));
@@ -2872,7 +2872,7 @@ void genshin_relics::retranslateUi()
     menuLang->setText(tr("简体中文"));
 }
 
-void genshin_relics::on_comboBox_character(int index)
+void genshin_relics::on_comboBoxCharacter(int index)
 {//更改角色预设
     combox_en->setCurrentIndex(index);
     combox_zh->setCurrentIndex(index);

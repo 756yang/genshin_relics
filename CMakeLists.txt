@@ -33,8 +33,9 @@ add_custom_target(OUTPUT ALL DEPENDS ${QM_FILES})
 
 # 生成可执行文件并设置输出目录
 set(EXECUTABLE_OUTPUT_PATH  ${PROJECT_SOURCE_DIR}/Bin)
-# 请把ui文件名复制于下,此处不加ts文件
-add_executable(${PROJECT_NAME} ${SrcFiles}
+# 请把ui文件名复制于下,此处不加ts文件,加上WIN32在独立运行时不显示命令行窗口
+add_executable(${PROJECT_NAME} WIN32
+    ${SrcFiles}
     #${TS_FILES}
     genshin_relics.ui
     genshin_relics.qrc

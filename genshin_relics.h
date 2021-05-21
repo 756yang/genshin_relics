@@ -180,7 +180,7 @@ private slots:
     void on_menuPasteSlt();
     void on_menuPaste2Slt();
     void on_menuLangSlt();
-    void on_comboBox_character(int index);
+    void on_comboBoxCharacter(int index);//关联的槽函数被定义为"on_ObjectName_Signal(arglist)"则会有警告，故避免之
 
 private:
 

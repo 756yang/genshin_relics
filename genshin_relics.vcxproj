@@ -107,13 +107,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="charset_convert.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="logo.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="genshin_relics.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="genshin_relics.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtTranslation Include="genshin_relics_en.ts" />
+    <QtTranslation Include="genshin_relics_zh.ts" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

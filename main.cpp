@@ -55,6 +55,16 @@ void free_arguments_utf8(int argc, char **argv)
     }
 }
 
+#ifdef _UNICODE
+/* msvc++ with qt only link this fuction so do it */
+int main(int argc, char **argv)
+{
+    QApplication a(argc, argv);
+    genshin_relics w;
+    w.show();
+    return a.exec();
+}
+#endif
 
 extern "C" int _tmain(int argc, _TCHAR **argv)
 {
