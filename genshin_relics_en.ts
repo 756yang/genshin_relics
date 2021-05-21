@@ -4,283 +4,271 @@
 <context>
     <name>genshin_relics</name>
     <message>
-        <location filename="genshin_relics.cpp" line="17"/>
-        <location filename="genshin_relics.cpp" line="2525"/>
+        <location filename="genshin_relics.cpp" line="13"/>
+        <location filename="genshin_relics.cpp" line="2866"/>
         <source>圣遗物评分为：</source>
         <translation>Relics Scores is:</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="31"/>
-        <location filename="genshin_relics.cpp" line="1377"/>
-        <location filename="genshin_relics.cpp" line="1403"/>
-        <location filename="genshin_relics.cpp" line="2526"/>
+        <location filename="genshin_relics.cpp" line="27"/>
+        <location filename="genshin_relics.cpp" line="1655"/>
+        <location filename="genshin_relics.cpp" line="1681"/>
+        <location filename="genshin_relics.cpp" line="2867"/>
         <source>打开图片</source>
         <translation>Open Picture</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="32"/>
-        <location filename="genshin_relics.cpp" line="1411"/>
-        <location filename="genshin_relics.cpp" line="1435"/>
-        <location filename="genshin_relics.cpp" line="2527"/>
+        <location filename="genshin_relics.cpp" line="28"/>
+        <location filename="genshin_relics.cpp" line="1689"/>
+        <location filename="genshin_relics.cpp" line="1713"/>
+        <location filename="genshin_relics.cpp" line="2868"/>
         <source>保存图片</source>
         <translation>Save Picture</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="33"/>
-        <location filename="genshin_relics.cpp" line="1441"/>
-        <location filename="genshin_relics.cpp" line="2528"/>
+        <location filename="genshin_relics.cpp" line="29"/>
+        <location filename="genshin_relics.cpp" line="1720"/>
+        <location filename="genshin_relics.cpp" line="2869"/>
         <source>关于</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="34"/>
-        <location filename="genshin_relics.cpp" line="2529"/>
+        <location filename="genshin_relics.cpp" line="30"/>
+        <location filename="genshin_relics.cpp" line="2870"/>
         <source>粘贴</source>
         <translation>Paste</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="35"/>
-        <location filename="genshin_relics.cpp" line="2530"/>
+        <location filename="genshin_relics.cpp" line="31"/>
+        <location filename="genshin_relics.cpp" line="2871"/>
         <source>剪贴&apos;</source>
         <translation>Paste&apos;</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="46"/>
-        <location filename="genshin_relics.cpp" line="2531"/>
-        <source>语言</source>
-        <translation>Language</translation>
-    </message>
-    <message>
-        <location filename="genshin_relics.cpp" line="47"/>
-        <location filename="genshin_relics.cpp" line="2532"/>
+        <location filename="genshin_relics.cpp" line="32"/>
+        <location filename="genshin_relics.cpp" line="2872"/>
         <source>简体中文</source>
-        <translation>Simplified Chinese</translation>
-    </message>
-    <message>
-        <location filename="genshin_relics.cpp" line="48"/>
-        <location filename="genshin_relics.cpp" line="2533"/>
-        <source>英文</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="64"/>
+        <location filename="genshin_relics.cpp" line="87"/>
         <source>重复定义</source>
         <translation>Repeated Definition</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="65"/>
+        <location filename="genshin_relics.cpp" line="88"/>
         <source>文件genshin_relics.ini内容错误</source>
         <translation>File &apos;genshin_relics.ini&apos; Content error</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="66"/>
+        <location filename="genshin_relics.cpp" line="89"/>
         <source>数值错误</source>
         <translation>Numerical Error</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="67"/>
+        <location filename="genshin_relics.cpp" line="90"/>
         <source>非正常结束</source>
         <translation>Abnormal End</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="68"/>
+        <location filename="genshin_relics.cpp" line="91"/>
         <source>缺少信息</source>
         <translation>Lack of Information</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="69"/>
+        <location filename="genshin_relics.cpp" line="92"/>
         <source>文件genshin_relics.ini缺少部分配置信息</source>
         <translation>File &apos;genshin_relics.ini&apos; Some configuration information is missing</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="70"/>
+        <location filename="genshin_relics.cpp" line="93"/>
         <source>打开文件错误</source>
         <translation>Error Open File</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="71"/>
+        <location filename="genshin_relics.cpp" line="94"/>
         <source>找不到文件genshin_relics.ini</source>
         <translation>Cannot find file &apos;genshin_relics.ini&apos;</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="343"/>
+        <location filename="genshin_relics.cpp" line="462"/>
         <source>[绝对评分]</source>
         <translation>[Absolute Score]</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="344"/>
-        <location filename="genshin_relics.cpp" line="400"/>
+        <location filename="genshin_relics.cpp" line="463"/>
+        <location filename="genshin_relics.cpp" line="519"/>
         <source>
 圣遗物评分为：</source>
         <translation>
 relics scores:</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="345"/>
-        <location filename="genshin_relics.cpp" line="401"/>
+        <location filename="genshin_relics.cpp" line="464"/>
+        <location filename="genshin_relics.cpp" line="520"/>
         <source>
 总属性评分为：</source>
         <translation>
 total attr scores:</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="346"/>
-        <location filename="genshin_relics.cpp" line="402"/>
+        <location filename="genshin_relics.cpp" line="465"/>
+        <location filename="genshin_relics.cpp" line="521"/>
         <source>
 副属性评分为：</source>
         <translation>
 addition attr scores:</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="347"/>
-        <location filename="genshin_relics.cpp" line="403"/>
+        <location filename="genshin_relics.cpp" line="466"/>
+        <location filename="genshin_relics.cpp" line="522"/>
         <source>
 每十属性点收益增长%：</source>
         <translation>
 Revenue growth per ten attribute points (%):</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="399"/>
+        <location filename="genshin_relics.cpp" line="518"/>
         <source>[相对评分]</source>
         <translation>[Relate Score]</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="495"/>
+        <location filename="genshin_relics.cpp" line="614"/>
         <source>生命值</source>
         <translation>HP</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="525"/>
+        <location filename="genshin_relics.cpp" line="644"/>
         <source>生命值%</source>
         <translation>HP%</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="555"/>
+        <location filename="genshin_relics.cpp" line="674"/>
         <source>防御力</source>
         <translation>DEF</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="585"/>
+        <location filename="genshin_relics.cpp" line="704"/>
         <source>防御力%</source>
         <translation>DEF%</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="615"/>
+        <location filename="genshin_relics.cpp" line="734"/>
         <source>攻击力</source>
         <translation>ATK</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="645"/>
+        <location filename="genshin_relics.cpp" line="764"/>
         <source>攻击力%</source>
         <translation>ATK%</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="675"/>
-        <location filename="genshin_relics.cpp" line="2219"/>
+        <location filename="genshin_relics.cpp" line="794"/>
+        <location filename="genshin_relics.cpp" line="2530"/>
         <source>暴击率</source>
         <translation>CRIT Rate</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="705"/>
-        <location filename="genshin_relics.cpp" line="2220"/>
+        <location filename="genshin_relics.cpp" line="824"/>
+        <location filename="genshin_relics.cpp" line="2531"/>
         <source>暴击伤害</source>
         <translation>CRIT DMG</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="735"/>
-        <location filename="genshin_relics.cpp" line="2221"/>
+        <location filename="genshin_relics.cpp" line="854"/>
+        <location filename="genshin_relics.cpp" line="2532"/>
         <source>元素充能</source>
         <translation>Energy</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="765"/>
-        <location filename="genshin_relics.cpp" line="2222"/>
+        <location filename="genshin_relics.cpp" line="884"/>
+        <location filename="genshin_relics.cpp" line="2533"/>
         <source>元素精通</source>
         <translation>Mastery</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1130"/>
+        <location filename="genshin_relics.cpp" line="1408"/>
         <source>更改圣遗物</source>
         <translation>AlterRelic</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1134"/>
+        <location filename="genshin_relics.cpp" line="1412"/>
         <source>更改期望</source>
         <translation>Alter Exp</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1288"/>
+        <location filename="genshin_relics.cpp" line="1566"/>
         <source>点数分配</source>
         <translation>Points Assign</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1288"/>
+        <location filename="genshin_relics.cpp" line="1566"/>
         <source>剩余点数过小，停止分配！点数：</source>
         <translation>The remaining points are too small, stop assign! points:</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1323"/>
+        <location filename="genshin_relics.cpp" line="1601"/>
         <source>[点数分配]</source>
         <translation>[Points Assign]</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1329"/>
-        <location filename="genshin_relics.cpp" line="1333"/>
+        <location filename="genshin_relics.cpp" line="1607"/>
+        <location filename="genshin_relics.cpp" line="1611"/>
         <source>
 攻击路线，评分：</source>
         <translation>
 ATK Route, scores:</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1337"/>
-        <location filename="genshin_relics.cpp" line="1341"/>
+        <location filename="genshin_relics.cpp" line="1615"/>
+        <location filename="genshin_relics.cpp" line="1619"/>
         <source>
 双暴路线，评分：</source>
         <translation>
 CRIT Route, scores:</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1378"/>
+        <location filename="genshin_relics.cpp" line="1656"/>
         <source>所有图片(*.bmp *.jpg *.jpeg *.png);;PNG图片(*.png);;BMP图片(*.bmp);;JPEG图片(*.jpg *.jpeg);;所有文件(*.*)</source>
         <translation>All Picture(*.bmp *.jpg *.jpeg *.png);;PNG Picture(*.png);;BMP Picture(*.bmp);;JPEG Picture(*.jpg *.jpeg);;All File(*.*)</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1403"/>
+        <location filename="genshin_relics.cpp" line="1681"/>
         <source>打开失败：</source>
         <translation>Failed to open:</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1412"/>
+        <location filename="genshin_relics.cpp" line="1690"/>
         <source>PNG图片(*.png);;BMP图片(*.bmp);;JPEG图片(*.jpg *.jpeg);;所有文件(*.*)</source>
         <translation>PNG Picture(*.png);;BMP Picture(*.bmp);;JPEG Picture(*.jpg *.jpeg);;All File(*.*)</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1424"/>
+        <location filename="genshin_relics.cpp" line="1702"/>
         <source>绝对总评:</source>
         <translation>Absolute Score:</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1425"/>
-        <location filename="genshin_relics.cpp" line="1429"/>
+        <location filename="genshin_relics.cpp" line="1703"/>
+        <location filename="genshin_relics.cpp" line="1707"/>
         <source>
 副属性分:</source>
         <translation>
 addition scores:</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1428"/>
+        <location filename="genshin_relics.cpp" line="1706"/>
         <source>
 相对总评:</source>
         <translation>
 Relate Score:</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1435"/>
+        <location filename="genshin_relics.cpp" line="1713"/>
         <source>您还未打开或粘贴图片！</source>
         <translation>You haven&apos;t opened or pasted the picture yet!</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="1441"/>
+        <location filename="genshin_relics.cpp" line="1721"/>
         <source>圣遗物特调是一款原神圣遗物工具，它集评分、优化、计算于一体。
 [评分]，可以对单个圣遗物进行两种类型的评分，绝对评分使优先属性具有绝对权，相对评分使优先属性相对优先，绝对优先给所有属性评分，而相对优先除了给优先属性评分外只给输出属性评分。
 绝对评分不收敛，相对评分收敛于最优属性，因此圣遗物点数分配采用相对评分体系，而绝对优先更适合评分体系。相对优先评分说明了各个属性对输出提升，这比绝对优先更准确。
@@ -293,6 +281,8 @@ Relate Score:</translation>
 保存图片：保存打开或粘贴的图片，如果有评分，则打印评分到保存的图片中。
 关于：帮助说明
 粘贴：打开剪切板中的图片数据（不是文件）并截取一部分作单个圣遗物的属性截图，并识别。
+剪贴&apos;：功能同粘贴，只是裁剪方式不一样。
+角色预设下拉选框：选择相应的预设，会影响定义的十二个分级。
 顶部五个按钮，对应圣遗物总属性，点按会固定属性（点数分配时不改变其属性）。
 其下十个按钮，对应十项副属性，与副属性四个按钮配合，以改变副属性项。
 副属性四个按钮，点按会出现&quot;[]&quot;以表示选中，然后按下十项副属性按钮，以填入副属性项。
@@ -300,11 +290,12 @@ Relate Score:</translation>
 更改期望 / 更改圣遗物按钮，下拉选框有十二个用于评分的分级，更改这个选框时影响期望总属性 / 圣遗物总属性。
 期望总属性右边选框，更改优先属性。
 圣遗物点数按钮，点按进行点数分配，其右输入框输入0或负值以计算圣遗物副属性点数（固定属性转换为百分比属性计算，会损失一定点数）。
+纯输出选框：选中以进行只考虑攻击力和双暴的计算。
 生命值lef  防御力def  攻击力atk  暴击率ctr  暴击伤害ctd
 元素充能ene  元素精通cx  附加伤害add  加p表示百分比，如patk
 
 作者：杨玉军
-于2021年4月19日完成</source>
+于2021年4月19日完成  5月21日更新</source>
         <translation>Relic special mixologist is an original relics tool, which integrates scoring, optimization and calculation.
 [scoring], there are two types of scoring for a single relic. Absolute scoring gives the priority attribute absolute weight, relative scoring gives the priority attribute relative priority, absolute priority gives all attributes ratings, and relative priority only gives the output attribute ratings except the priority attribute ratings.
 The absolute score does not converge, and the relative score converges to the optimal attribute, so the relic points allocation adopts the relative score system, and the absolute priority is more suitable for the score system. Relative priority score shows that each attribute improves the output, which is more accurate than absolute priority.
@@ -316,6 +307,8 @@ Open Picture: open the attribute screenshot of a single relic and identify it.
 Save Picture: save the opened or pasted picture. If there is a score, the score will be printed into the saved picture.
 About: help notes
 Paste: open the image data (not the file) in the clipboard and take part of it as the attribute screenshot of a single relic, and identify it.
+Paste&apos;: the function is the same as Paste, but the cutting method is different.
+Character preset drop-down box: select the corresponding preset, which will affect the 12 levels defined.
 The top five buttons correspond to the total attributes of relic. Pressing them will fix the attributes (the attributes will not be changed when the points are allocated).
 The next ten buttons, corresponding to ten sub attributes, cooperate with the four sub attributes buttons to change the sub attributes.
 There are four buttons for sub attributes. Click to show &quot;[]&quot; to indicate selection, and then press the ten sub attributes button to fill in the sub attributes.
@@ -323,38 +316,39 @@ There are six buttons under the expected total attribute. Press the ATK% and CRI
 Alter Exp / Alter Relics button. The drop-down box has 12 ratings for scoring. Changing this box will affect the expected total attribute / relics total attribute.
 Select the box to the right of the expected total attribute and change the priority attribute.
 Click the Relic Points button to assign points. Enter 0 or negative value in the right input box to calculate the relics addition attribute points (if the fixed attribute is converted to the percentage attribute, a certain number of points will be lost).
+OnlyDMG box: select to calculate only ATK and CRIT.
 HP:lef  DEF:def  ATK:atk  CRIT_Rate:ctr  CRIT_DMG:ctd
 Ene_Charge:ene  Ele_Master:cx  DMG_Bonus:add  (plus p is the percentage, such as patk)
 Author: Yang Yujun
-Completed on April 19, 2021</translation>
+Completed on April 19, 2021  Updated on May 21</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="2216"/>
+        <location filename="genshin_relics.cpp" line="2527"/>
         <source>生命</source>
         <translation>HP</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="2217"/>
+        <location filename="genshin_relics.cpp" line="2528"/>
         <source>防御</source>
         <translation>DEF</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="2218"/>
+        <location filename="genshin_relics.cpp" line="2529"/>
         <source>攻击</source>
         <translation>ATK</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="2223"/>
+        <location filename="genshin_relics.cpp" line="2534"/>
         <source>元素伤害</source>
         <translation>DMG</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="2224"/>
+        <location filename="genshin_relics.cpp" line="2535"/>
         <source>物理伤害</source>
         <translation>Physical DMG</translation>
     </message>
     <message>
-        <location filename="genshin_relics.cpp" line="2225"/>
+        <location filename="genshin_relics.cpp" line="2536"/>
         <source>治疗</source>
         <translation>Healing</translation>
     </message>
@@ -627,6 +621,11 @@ p, li { white-space: pre-wrap; }
         <location filename="genshin_relics.ui" line="906"/>
         <source>圣遗物点数</source>
         <translation>Relic Points</translation>
+    </message>
+    <message>
+        <location filename="genshin_relics.ui" line="946"/>
+        <source>纯输出</source>
+        <translation>OnlyDMG</translation>
     </message>
 </context>
 </TS>
