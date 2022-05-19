@@ -1,7 +1,7 @@
 # genshin_relics
 genshin relics tools for evaluating and optimizing
 
-![圣遗物特调使用说明](圣遗物特调使用说明.png)
+![圣遗物特调使用说明](https://github.com/756yang/genshin_relics/raw/main/%E5%9C%A3%E9%81%97%E7%89%A9%E7%89%B9%E8%B0%83%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.png)
 
 this code use qt compile, you can use msvc++ with qt tools for building.
 the code only has main program, without picture recognition.
