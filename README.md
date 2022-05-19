@@ -1,6 +1,8 @@
 # genshin_relics
 genshin relics tools for evaluating and optimizing
 
+![圣遗物特调使用说明](圣遗物特调使用说明.png)
+
 this code use qt compile, you can use msvc++ with qt tools for building.
 the code only has main program, without picture recognition.
 you can change the picture recognition engine, whit cmd "ocr.exe xxx.png > xxx.txt" running.
